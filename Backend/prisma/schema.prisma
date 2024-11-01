@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(uuid())
+  fname           String
+  lname           String
+  email           String    @unique
+  password        String
+  role            Role?     @default(Admin)
+  refreshToken    String?
+  refreshTokenExp DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Patient {
+  id              String   @id @default(uuid())
+  firstName       String
+  middleName      String?
+  lastName        String
+  idNumber        String?  @unique
+  gender          String
+  dateOfBirth     DateTime
+  phoneNumber     String
+  email           String?
+  kinName         String
+  kinRelationship String
+  kinPhoneNumber  String
+  patientType     String
+  insurance       String?
+  memberName      String?
+  memberNumber    String?
+  createdAt       DateTime @default(now())
+  triages         Triage[]
+}
+
+model Triage {
+  id                     String   @id @default(uuid())
+  patientId              String
+  consultationDate       DateTime? // Make this nullable
+  vitals                 Json
+  symptoms               Json
+  doctorNotes            String?  // Make these fields nullable
+  diagnosis              String?
+  recommendedTreatment   String?
+  //followUpRequired       Boolean?  
+  additionalNotes        String?
+  createdAt              DateTime @default(now())
+
+  patient                Patient  @relation(fields: [patientId], references: [id]) // Establish relation to Patient
+}
+
+
+
+enum Role {
+  Admin
+  Doctor
+  Nurse
+  User
+}
