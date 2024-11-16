@@ -64,4 +64,5 @@ enum Role {
   Doctor
   Nurse
   User
+  Reception
 }

@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import useSignIn from "../hooks/useSignIn";
-import { Alert, Button, Card, Input } from "antd";
+import { Alert, Button, Card, Input, Modal, Typography } from "antd";
+import loginImg from "../assets/images/loginImg.jpg";
+import logoLogin from "../assets/images/logoLogin.png"; // Add the logo image import here
+
+const { Title } = Typography;
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isOtpModalVisible, setIsOtpModalVisible] = useState(false); // State to control modal visibility
   const {
     email,
     setEmail,
@@ -19,102 +24,202 @@ const Login = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-  return (
-    <div className="">
-      <div className="row justify-content-center">
-        <div className="col-md-8 col-lg-4 mt-5">
-        <Card>
-          <h3 className="text-center text-muted">Welcome Back</h3>
-          <p className="text-center text-muted">
-            Sign in to access your account
-          </p>
+  const handleLoginSuccess = () => {
+    // Show OTP modal on successful login
+    setIsOtpModalVisible(true);
+  };
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleLogin();
+  return (
+    <div
+      className="d-flex justify-content-center align-items-center min-vh-100"
+      style={{ backgroundColor: "#f8f9fa" }}
+    >
+      <Card
+        className="p-0"
+        style={{
+          maxWidth: "900px",
+          width: "100%",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          borderRadius: "8px", // Apply border-radius to the card
+        }}
+      >
+        <div className="d-flex flex-row" style={{ width: "100%" }}>
+          {/* Right Side with Form */}
+          <div
+            className="p-4"
+            style={{
+              flex: 1,
+              maxWidth: "450px",
+              minWidth: "300px", // Ensure it doesn't shrink too much
             }}
           >
-            {error && (
-              <Alert message={error} type="error" showIcon closeText="Close" />
-            )}
+            {/* Logo above the Welcome message */}
+            <div className="text-center mb-3">
+              <img
+                src={logoLogin}
+                alt="Logo"
+                style={{ width: "230px", height: "auto" }} // Adjust the size as needed
+              />
+            </div>
 
-            <div className="mb-3 ">
-              <label htmlFor="email" className="form-label">
-                Email<span className="text-danger">*</span>
-              </label>
-              <div className="input-group">
-                <span className="input-group-text">
-                  <FaEnvelope />
-                </span>
+            <p className="text-center text-muted" style={{ fontStyle: "italic" }}>
+              Sign in to access your account
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleLogin(); // Proceed with login action
+                handleLoginSuccess(); // Trigger OTP modal on login success
+              }}
+            >
+              {error && (
+                <Alert message={error} type="error" showIcon closeText="Close" />
+              )}
+
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email<span className="text-danger">*</span>
+                </label>
                 <Input
+                  size="large"
                   type="email"
-                  className="form-control"
                   name="email"
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  placeholder="Enter your email"
                 />
               </div>
-            </div>
 
-            <div className="mb-3 text-start">
-              <label htmlFor="password" className="form-label">
-                Password<span className="text-danger">*</span>
-              </label>
-              <div className="input-group">
-                <span
-                  id="togglePassword"
-                  onClick={togglePasswordVisibility}
-                  style={{ cursor: "pointer" }}
-                  className="input-group-text"
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
+              <div className="mb-3 text-start">
+                <label htmlFor="password" className="form-label">
+                  Password<span className="text-danger">*</span>
+                </label>
                 <Input
+                  size="large"
                   type={showPassword ? "text" : "password"}
-                  className="form-control"
                   name="password"
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  prefix={
+                    <span
+                      onClick={togglePasswordVisibility}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  }
+                  placeholder="Enter your password"
                 />
               </div>
-            </div>
 
-            <div className="py-2 d-flex align-items-center">
-              <input
-                className="form-check-input me-2"
-                type="checkbox"
-                id="flexCheckDefault"
-              />
-              <label
-                className="form-check-label text-muted"
-                htmlFor="flexCheckDefault"
-              >
-                Remember me
-              </label>
-            </div>
+              <div className="py-2 d-flex align-items-center">
+                <input
+                  className="form-check-input me-2"
+                  type="checkbox"
+                  id="flexCheckDefault"
+                />
+                <label
+                  className="form-check-label text-muted"
+                  htmlFor="flexCheckDefault"
+                >
+                  Remember me
+                </label>
+              </div>
 
-            <div className="mb-3">
-              <Button htmlType="submit" type="primary" disabled={loading} block>
-                {loading ? "Logging in..." : "Login"}
-              </Button>
-            </div>
-          </form>
+              <div className="my-3">
+                <Button size="large" htmlType="submit" type="primary" disabled={loading} block>
+                  {loading ? "Logging in..." : "Login"}
+                </Button>
+              </div>
+            </form>
 
-          <p className="text-muted">
-            Don't have an account?{" "}
-            <a href="/register" className="text-primary">
-              Register
-            </a>
-          </p>
-        </Card>
+            {/* Forgot Password Link */}
+            <div className="text-center mt-3">
+              <a href="/forgot-password" className="text-muted" style={{ fontSize: "14px" }}>
+                Forgot password?
+              </a>
+            </div>
+          </div>
+
+          {/* Left Side with Image */}
+          <div
+            className="login-image"
+            style={{
+              flex: 1,
+              maxWidth: "450px",
+              minWidth: "300px", // Ensure it doesn't shrink too much
+              padding: 0, // Remove any padding
+              borderRadius: "8px", // Match the card's border-radius
+              overflow: "hidden", // Ensure the image is contained within the rounded corners
+            }}
+          >
+            <img
+              src={loginImg}
+              alt="Login Illustration"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "8px", // Match the card's border-radius
+              }}
+            />
+          </div>
         </div>
-       
-      </div>
+      </Card>
+
+      {/* OTP Modal */}
+      <Modal
+        title="Enter OTP"
+        visible={isOtpModalVisible}
+        onCancel={() => setIsOtpModalVisible(false)}
+        footer={null}
+        width={400}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            padding: "20px",
+          }}
+        >
+          <img
+            src={logoLogin}
+            alt="Logo"
+            style={{ width: "100px", marginBottom: "10px" }}
+          />
+          <Title level={5}>Enter OTP</Title>
+          <p style={{ color: "#888" }}>
+            We sent a 6-digit code to your email. Please enter it below.
+          </p>
+
+          <Input.OTP
+            formatter={(str) => str.toUpperCase()}
+            maxLength={6}
+            placeholder="Enter OTP"
+            style={{
+              textAlign: "center",
+              width: "100%",
+              maxWidth: "300px",
+              marginBottom: "20px",
+            }}
+          />
+
+          <Button
+            type="primary"
+            block
+            onClick={() => {
+              alert("OTP submitted successfully!");
+              setIsOtpModalVisible(false); // Close OTP modal after submission
+            }}
+          >
+            Submit
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

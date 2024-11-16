@@ -5,6 +5,22 @@
   text-align: center;
 }
 
+.ant-card .ant-card-body {
+ padding: 0px !important; 
+  border-radius: 0 0 8px 8px;
+}
+
+
+
+
+
+
+
+.scrollable-menu {
+  overflow-y: auto;
+  max-height: calc(100vh - 64px); /* Adjust the max-height based on your layout */
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -55,7 +71,7 @@
 
 }
 
-.header{
+/* .header{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -67,7 +83,7 @@
   top: 0;
   height: 64 !important;
   line-height: 64px;
-}
+} */
 
 @keyframes logo-spin {
   from {
@@ -93,10 +109,37 @@
 }
 
 
-/* 
+
 @media screen and (max-width: 768px) {
   .sidemenu {
     display: block; /* Hide the Sider component on smaller screens */
     z-index: 1;
   }
-} */
+  .sideStyle {
+    display: block; /* Hide the Sider component on smaller screens */
+    z-index: 1;
+  }
+  
+  .ant-layout-sider {
+    flex: 0 0 230px !important;
+    max-width: 230px !important;
+    min-width: 230px !important;
+    width: 230px !important;
+    height: 100dvh !important;
+    overflow-y: scroll !important;
+  }
+  
+  .ant-layout-sider-collapsed {
+    flex: 0 0 80px !important;
+    max-width: 0px !important;
+    min-width:0px !important;
+    width: 0 !important;
+  }
+  .contentStyle {
+    margin-left: 0; /* Adjust content margin for smaller screens */
+    width: 100%;
+    padding: 0;
+  }
+
+}
+

@@ -54,18 +54,18 @@ const DoctorDashboard = () => {
     },
   };
   return (
-    <div className="container">
+    <div className="">
       <div className="card-title">
-        <h5 className="card-title p-2">Dashboard</h5>
+        <h5 className="card-title px-2 text-dark">Dashboard</h5>
       </div>
-      <div className="card-body">
+      <div className="card-body text-dark">
         <p>Welcome to the Doctor Dashboard</p>
         
         <div className="row gap-3 gap-md-0">
           {/* Existing KPI Cards */}
           <div className="col col-12 col-md-3">
-            <div className="bg-primary card text-white">
-              <div className="card-body">
+          <div className="card" style={{ backgroundColor: "#0060a3", color: "#fafafa" }}>
+          <div className="card-body">
                 <div className="card-title p-2">
                   <UsergroupAddOutlined style={{ marginRight: 8 }} />
                   Today Patients List
@@ -76,8 +76,8 @@ const DoctorDashboard = () => {
           </div>
           {/* Additional KPI Cards */}
           <div className="col col-12 col-md-3">
-            <div className="bg-danger card text-white">
-              <div className="card-body">
+          <div className="card" style={{ backgroundColor: "#58586e", color: "#fafafa" }}>
+          <div className="card-body">
                 <div className="card-title p-2">
                   <FileDoneOutlined style={{ marginRight: 8 }} />
                   Total Appointments
@@ -87,7 +87,7 @@ const DoctorDashboard = () => {
             </div>
           </div>
           <div className="col col-12 col-md-3">
-            <div className="bg-success card text-white">
+          <div className="card" style={{ backgroundColor: "#0060a3", color: "#fafafa" }}>
               <div className="card-body">
                 <div className="card-title p-2">
                   <FaUser style={{ marginRight: 8 }} />
@@ -98,7 +98,7 @@ const DoctorDashboard = () => {
             </div>
           </div>
           <div className="col col-12 col-md-3">
-            <div className="bg-primary card text-white">
+          <div className="card" style={{ backgroundColor: "#ac8342", color: "#fafafa" }}>
               <div className="card-body">
                 <div className="card-title p-2">
                   <CheckCircleOutlined style={{ marginRight: 8 }} />

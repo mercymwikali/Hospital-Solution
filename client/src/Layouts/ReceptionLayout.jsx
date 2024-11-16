@@ -32,7 +32,7 @@ import Signout from "../Auth/Signout";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const DocLayout = () => {
+const ReceptionLayout = () => {
   const location = useLocation();
 
   // Extract the current route name from the location pathname
@@ -56,7 +56,7 @@ const DocLayout = () => {
 
   const items = [
     {
-      key: "/Doctor",
+      key: "/Reception",
       icon: <AppstoreOutlined style={{ color: "#fff" }} />,
       label: "Dashboard",
     },
@@ -237,15 +237,15 @@ const DocLayout = () => {
       </Layout>
 
       <Footer
-    style={{
-      textAlign: "center",
-      color: "#67336d",
-    }}
-  >
-    HMIS @ {new Date().getFullYear()} Created by potestastechnologies
-  </Footer>
+        style={{
+          textAlign: "center",
+          color: "#67336d",
+        }}
+      >
+        HMIS ©2023 Created by MayFair
+      </Footer>
     </Layout>
   );
 };
 
-export default DocLayout;
+export default ReceptionLayout

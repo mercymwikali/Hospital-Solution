@@ -34,6 +34,9 @@ const useSignIn = () => {
             case "Nurse":
               navigate('/Nurse');
               break;
+              case "Reception":
+                navigate('/Reception');
+                break;
             default:
               navigate('/login'); // Redirect to login or a default page if role is not recognized
               break;

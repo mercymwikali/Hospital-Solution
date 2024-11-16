@@ -1,21 +1,34 @@
 import React, { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  AppstoreOutlined,
   UserOutlined,
   CheckSquareOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   BellFilled,
+  TeamOutlined,
+  UserSwitchOutlined,
+  FileTextOutlined,
+  HistoryOutlined,
+  FileAddOutlined,
+  CalendarOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  MailOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+
 import { Layout, Menu, theme, Button, Avatar, Badge, Breadcrumb } from "antd";
 import { FaUserDoctor, FaEyeDropper, FaRadiation } from "react-icons/fa6";
 import { GiSoapExperiment } from "react-icons/gi";
 import { TbDental } from "react-icons/tb";
 import { LuBaby } from "react-icons/lu";
 import logo from "../assets/images/logo.png";
+import smallLogo from "../assets/images/smallLogo.png";
+
 import Signout from "../Auth/Signout";
-import { FaUserNurse } from "react-icons/fa";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -49,221 +62,62 @@ const NurseLayout = () => {
       label: "Dashboard",
     },
     {
-      key: "/Patient-Registration",
-      icon: <UserOutlined style={{ color: "#fff" }} />,
-      label: "Patient Registration",
-      children: [
-        {
-          key: "/Nurse/PatientRegistration",
-          label: "Add Patient",
-        },
-        {
-          key: "/Nurse/Patient-list",
-          label: "Patient List",
-        },
-        // {
-        //     key: '/Dispatched-List',
-        //     label: 'Dispatched List'
-        // },
-      ],
+      type: "divider",
     },
     {
-      key: "/nurses",
-      icon: <FaUserNurse style={{ color: "#fff" }} />,
+      key: "RegistrationGroup",
+      label: <span style={{ color: "#ac8342", fontWeight: "bold" }}>Registration</span>,
       type: "group",
-      label: "Nurse",
       children: [
         {
-          key: '/Nurse/New-Patients',
-          label: 'Observation List'
-      },
-      {
-        key: '/Nurse/Outpatient-list',
-        label: 'Outpatient'
+          key: "Patient-Registration",
+          label: "Patient Registration",
+          icon: <UserOutlined style={{ color: "#fff" }} />,
+        },
+        {
+          key: "New-Patients",
+          label: "Patient List",
+          icon: <TeamOutlined style={{ color: "#fff" }} />,
+        }      ],
     },
-        // {
-        //   key: "/past-doctor-visit",
-        //   label: "Past Doctor Visit",
-        // },
+    {
+        type: "divider",
+      },
+    {
+      key: "TriageGroup",
+      label: <span style={{ color: "#ac8342", fontWeight: "bold" }}>Triage</span>,
+      type: "group",
+      children: [
         {
-          key: "/Nurse/Patient-admissions",
-          label: "Patient Admission",
+          key: "triage",
+          label: "Triage List",
+          icon: <FileTextOutlined style={{ color: "#fff" }} />,
         },
-        // {
-        //   key: "/MCH-outpatient",
-        //   label: "MCH Outpatient",
-        // },
-        // {
-        //   key: "/theatre-day-case",
-        //   label: "Theatre Day Case",
-        // },
-        // {
-        //   key: "/procedure-queues",
-        //   label: "Procedure Queues",
-        // },
-        // {
-        //   key: "/anaesthetistia",
-        //   label: "Anaesthestia",
-        // },
-        // {
-        //   key: "/Surgeon",
-        //   label: "Surgeon",
-        // },
         {
-          key: "/Nurse/Discharge-list",
-          label: "Discharge Requests",
+          key: "past-doctor-visit",
+          label: "Past Doctor Visit",
+          icon: <HistoryOutlined style={{ color: "#fff" }} />,
         },
-        // {
-        //   key: "/Discharge-list",
-        //   label: "Discharge List",
-        // },
-        // {
-        //   key: "/pharmacy-list-Outpatient",
-        //   label: "Pharmacy List Outpatient",
-        // },
-        // {
-        //   key: "/Pharmacy-list-inpatient",
-        //   label: "Pharmacy List Inpatient",
-        // },
-        // {
-        //   key: "/Pharmacy-history",
-        //   label: "Pharmacy History",
-        // },
-        // {
-        //   key: "/pharmacy-list-returns",
-        //   label: "Pharmacy List Returns",
-        // },
       ],
     },
-    // {
-    //   key: "/Dental",
-    //   icon: <TbDental style={{ color: "#fff" }} />,
-    //   label: "Dental",
-    //   children: [
-    //     {
-    //       key: "/Dental-outpatient",
-    //       label: "Outpatient",
-    //     },
-    //     {
-    //       key: "/Dental-inpatient",
-    //       label: "Inpatient",
-    //     },
-    //   ],
-    // },
-    // {
-    //   key: "/Radiology",
-    //   icon: <FaRadiation style={{ color: "#fff" }} />,
-    //   label: "Radiology",
-    //   children: [
-    //     {
-    //       key: "/Radiology-list-Outpatient",
-    //       label: "Radiology List Outpatient",
-    //     },
-    //     {
-    //       key: "/Radiology-list-inpatient",
-    //       label: "Radiology List Inpatient",
-    //     },
-    //     {
-    //       key: "/Radiology-history",
-    //       label: "Radiology History",
-    //     },
-    //     {
-    //       key: "/walk-in",
-    //       label: "Walk In List",
-    //     },
-    //     // {
-    //     //     key: '/procedure-queues',
-    //     //     label: 'Procedure Queues'
-    //     // },
-    //   ],
-    // },
-    // {
-    //   key: "/theatre",
-    //   icon: <FaEyeDropper style={{ color: "#fff" }} />,
-    //   label: "Theatre",
-    // },
-    // {
-    //   key: "/Laboratory",
-    //   icon: <GiSoapExperiment style={{ color: "#fff" }} />,
-    //   label: "Laboratory",
-    //   children: [
-    //     {
-    //       key: "/Lab-list-Outpatient",
-    //       label: "Laboratory Outpatient List",
-    //     },
-    //     {
-    //       key: "/Lab-list-inpatient",
-    //       label: "Laboratory Inpatient List",
-    //     },
-    //     {
-    //       key: "/Lab-history",
-    //       label: "Laboratory History",
-    //     },
-    //     {
-    //       key: "/Inpatient",
-    //       label: "Current Inpatient",
-    //     },
-    //     {
-    //       key: "/walk-in",
-    //       label: "Walk In List",
-    //     },
-    //     {
-    //       key: "/treatment-sheet",
-    //       label: "Treatment Sheet",
-    //     },
-    //     {
-    //       key: "/Price-list",
-    //       label: "Price List",
-    //     },
-    //   ],
-    // },
-    // {
-    //   key: "/dialysis",
-    //   icon: <FaEyeDropper style={{ color: "#fff" }} />,
-    //   label: "Dialysis",
-    //   children: [
-    //     {
-    //       key: "/Nurse",
-    //       label: "Nurse",
-    //     },
-    //     {
-    //       key: "/Doctor",
-    //       label: "Doctor",
-    //     },
-    //     {
-    //       key: "/Inpatient",
-    //       label: "Current Inpatient",
-    //     },
-    //     {
-    //       key: "/walk-in",
-    //       label: "Walk In List",
-    //     },
-    //   ],
-    // },
     {
-      key: "/MCH",
-      icon: <LuBaby style={{ color: "#fff" }} />,
-      label: "MCH",
+        type: "divider",
+      },
+    {
+      key: "AppointmentsGroup",
+      label: <span style={{ color: "#ac8342", fontWeight: "bold" }}>Appointments</span>,
+      type: "group",
       children: [
         {
-          key: "/MCH-outpatient",
-          label: "MCH Outpatient",
+          key: "Appointments-list",
+          label: "Appointments",
+          icon: <CalendarOutlined style={{ color: "#fff" }} />,
         },
-        {
-          key: "/Mother-list",
-          label: "Mother's List",
-        },
-        {
-          key: "/Child-list",
-          label: "Children  List",
-        },
-        {
-          key: "/MCH",
-          label: "MCH",
-        },
+        
       ],
     },
   ];
+  
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
@@ -282,60 +136,20 @@ const NurseLayout = () => {
 
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed} breakpoint="lg">
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["/"]}
-          openKeys={openKeys}
-          onOpenChange={onOpenChange}
-          onClick={({ key }) => {
-            navigate(key);
-          }}
-          style={{
-            backgroundColor: "transparent",
-            height: "100vh",
-            color: "#fff",
-
-            paddingBottom: "90px",
-          }}
-        >
-          <div className=" demo-logo-vertical">
-            <img
-              src={logo}
-              height={70}
-              className="mb-3 pt-2"
-              //  style={{ maxWidth: collapsed ? '80px' : '100%', marginTop: '0' }}
-              alt="Logo"
-            />
-          </div>
-
-          {items.map((item) =>
-            item.children ? (
-              <Menu.SubMenu key={item.key} icon={item.icon} title={item.label}>
-                {item.children.map((child) => (
-                  <Menu.Item key={child.key} className="menu-subitem">
-                    {child.label}
-                  </Menu.Item>
-                ))}
-              </Menu.SubMenu>
+      <Header className="headerstyle">
+        <div className="d-flex justify-content-center pt-2">
+          <div className="demo-logo-vertical">
+            {collapsed ? (
+              <img
+                src={smallLogo}
+                height={70}
+                className="mb-3 pt-1"
+                alt="Logo"
+              />
             ) : (
-              <Menu.Item key={item.key} icon={item.icon} className="menu-item">
-                {item.label}
-              </Menu.Item>
-            )
-          )}
-        </Menu>
-      </Sider>
-      <Layout className="site-layout">
-        <Header
-          style={{
-            padding: 0,
-            backgroundColor: "#002329",
-            zIndex: 1,
-          }}
-          className="header"
-        >
+              <img src={logo} height={70} className="mb-3 pt-1" alt="Logo" />
+            )}
+          </div>
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -346,18 +160,45 @@ const NurseLayout = () => {
               height: 64,
               color: "#fff",
             }}
-            // className='d-sm-none d-md-block'
           />
+        </div>
+        <Signout />
+      </Header>
 
-          <Signout />
-        </Header>
-
-        <Layout>
+      <Layout hasSider>
+        <Sider
+          className={`sideStyle ${collapsed ? "collapsed" : ""}`}
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          breakpoint="lg"
+        >
+          <Menu
+            theme="light"
+            mode="inline"
+            defaultSelectedKeys={["/Nurse"]}
+            openKeys={openKeys}
+            onOpenChange={onOpenChange}
+            onClick={({ key }) => {
+              navigate(key);
+            }}
+            style={{
+              backgroundColor: "#ffffff",
+              height: "100vh",
+              paddingBottom: "90px",
+              color: "#67336d",
+            }}
+            items={items} // Pass the items array here
+          />
+        </Sider>
+       <Layout className="site-layout">
+       <div className="site-layout">
           <Breadcrumb
             style={{
-              margin: "16px 16px",
-              color: "#67336d",
+              marginLeft: collapsed ? 80 : 230,
               transition: "all 0.2s",
+              padding: 12,
+              color: "#67336d",
             }}
           >
             <Breadcrumb.Item>Home</Breadcrumb.Item>
@@ -366,13 +207,15 @@ const NurseLayout = () => {
               <Breadcrumb.Item key={index}>
                 {segment.charAt(0).toUpperCase() + segment.slice(1)}
               </Breadcrumb.Item>
-            ))}{" "}
+            ))}{""}
           </Breadcrumb>
           <Content
             className="contentStyle"
             style={{
-              margin: "2px 16px",
-              padding: 2,
+              marginLeft: collapsed ? 80 : 230,
+
+              transition: "all 0.2s",
+              padding: 12,
               minHeight: 680,
               background: colorBgContainer,
               borderRadius: 8,
@@ -380,17 +223,18 @@ const NurseLayout = () => {
           >
             <Outlet />
           </Content>
+        </div>
         </Layout>
-
-        <Footer
-          style={{
-            textAlign: "center",
-            color: "#67336d",
-          }}
-        >
-          HMIS ©2023 Created by MayFair
-        </Footer>
       </Layout>
+
+      <Footer
+    style={{
+      textAlign: "center",
+      color: "#67336d",
+    }}
+  >
+    HMIS @ {new Date().getFullYear()} Created by potestastechnologies
+  </Footer>
     </Layout>
   );
 };

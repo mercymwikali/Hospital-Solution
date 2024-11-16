@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')).render(
           colorPrimary: '#0060a3',
           colorBorder:'#62c1db',
           colorPrimaryBg	:'#0060a3',
-          colorText:'#000',
+         // colorText:'#000',
           colorIcon:'#FAFAFA'
         },
         components: {

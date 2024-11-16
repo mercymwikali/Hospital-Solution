@@ -58,7 +58,7 @@ const DoctorDetailsForm = () => {
                 </Button>
             </div>
             {patient && (
-                <div className="card-header">
+                <div className="card-header text-dark">
                     <h5>Patient Details</h5>
                     <p><strong>First Name:</strong> {patient.firstName}</p>
                     <p><strong>Last Name:</strong> {patient.lastName}</p>

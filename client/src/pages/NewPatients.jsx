@@ -109,7 +109,7 @@ const NewPatients = () => {
 
     return (
         <div className='container'>
-            <h4 className='text-center p-3'>New Patients</h4>
+            <h4 className='text-center p-3' style={{ color: '#ac8342' }}>New Patients</h4>
             <Search placeholder="Search by Name or ID Number" onSearch={handleSearch} style={{ marginBottom: '20px' }} />
             <div className='d-flex justify-content-between'>
                 <Button type="primary" onClick={handleNewPatient} style={{ marginBottom: '20px' }}>Register New Patient</Button>
