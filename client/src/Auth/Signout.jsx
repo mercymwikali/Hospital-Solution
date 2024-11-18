@@ -11,21 +11,21 @@ import { GiRamProfile } from 'react-icons/gi';
 const Signout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userDetails = useAuth();
+  const userDetails = useAuth();  // Use the custom hook to get user info
+  console.log("User details:", userDetails);
 
   const handleMenuClick = (e) => {
-    if (e.key === 'signout') {
-      dispatch(logout(userDetails.user.id));
-      navigate('/login');
-    } else if (e.key === 'view-profile') {
+    if (e.key === 'signout' ) {
+      dispatch(logout()); // Dispatch logout action
+      navigate('/login'); // Navigate to login page
+    } else if (e.key === 'view-profile' && userDetails) {
       const rolePath = {
         Admin: '/Admin/user-profile',
         Doctor: '/Doctor/view-profile',
         Nurse: '/Nurse/view-profile',
         Reception: '/Reception/view-profile',
-
       };
-      navigate(rolePath[userDetails.user.role] || '/');
+      navigate(rolePath[userDetails.role] || '/');
     }
   };
 
@@ -41,12 +41,12 @@ const Signout = () => {
   );
 
   const getSalutation = () => {
-    if (userDetails.user.role === 'Doctor') {
-      return `Hi Doctor ${userDetails.user.fname}`;
-    } else if (userDetails.user.role === 'Nurse') {
-      return `Hi Nurse ${userDetails.user.fname}`;
+    // Ensure userDetails is available before accessing properties
+    if (userDetails && userDetails.userData.firstName) {
+      console.log("User details:", userDetails.userData);
+      return `Hi ${userDetails.userData.firstName}`;
     }
-    return `Hi ${userDetails.user.fname}`;
+    return 'Hi there'; // Default greeting if userDetails is not available
   };
 
   return (

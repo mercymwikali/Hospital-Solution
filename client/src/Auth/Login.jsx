@@ -3,19 +3,22 @@ import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import useSignIn from "../hooks/useSignIn";
 import { Alert, Button, Card, Input, Modal, Typography } from "antd";
 import loginImg from "../assets/images/loginImg.jpg";
-import logoLogin from "../assets/images/logoLogin.png"; // Add the logo image import here
+import logoLogin from "../assets/images/logoLogin.png";
 
 const { Title } = Typography;
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isOtpModalVisible, setIsOtpModalVisible] = useState(false); // State to control modal visibility
   const {
-    email,
-    setEmail,
+    staffNo,
+    setStaffNo,
     password,
     setPassword,
+    otp,
+    setOtp,
+    isOtpRequired,
     handleLogin,
+    handleVerifyOtp,
     loading,
     error,
   } = useSignIn();
@@ -23,11 +26,10 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
-
-  const handleLoginSuccess = () => {
-    // Show OTP modal on successful login
-    setIsOtpModalVisible(true);
-  };
+  // const handleLoginSuccess = () => {
+  //   // Show OTP modal on successful login
+  //   setIsOtpModalVisible(true);
+  // };
 
   return (
     <div
@@ -70,7 +72,7 @@ const Login = () => {
               onSubmit={(e) => {
                 e.preventDefault();
                 handleLogin(); // Proceed with login action
-                handleLoginSuccess(); // Trigger OTP modal on login success
+             //   handleLoginSuccess(); // Trigger OTP modal on login success
               }}
             >
               {error && (
@@ -83,13 +85,11 @@ const Login = () => {
                 </label>
                 <Input
                   size="large"
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="staffNo"
+                  value={staffNo}
+                  onChange={(e) => setStaffNo(e.target.value)}
+                  placeholder="Enter your Staff No"
                   required
-                  placeholder="Enter your email"
                 />
               </div>
 
@@ -175,8 +175,8 @@ const Login = () => {
       {/* OTP Modal */}
       <Modal
         title="Enter OTP"
-        visible={isOtpModalVisible}
-        onCancel={() => setIsOtpModalVisible(false)}
+        visible={isOtpRequired}
+        onCancel={() => {}}
         footer={null}
         width={400}
       >
@@ -196,25 +196,24 @@ const Login = () => {
             We sent a 6-digit code to your email. Please enter it below.
           </p>
 
-          <Input.OTP
-            formatter={(str) => str.toUpperCase()}
-            maxLength={6}
-            placeholder="Enter OTP"
-            style={{
-              textAlign: "center",
-              width: "100%",
-              maxWidth: "300px",
-              marginBottom: "20px",
-            }}
-          />
+          <Input
+  value={otp}
+  onChange={(e) => setOtp(e.target.value)} // Ensure this correctly updates the OTP state
+  placeholder="Enter OTP"
+  maxLength={6}
+  style={{
+    textAlign: "center",
+    width: "100%",
+    maxWidth: "300px",
+    marginBottom: "20px",
+  }}
+/>
+
 
           <Button
             type="primary"
             block
-            onClick={() => {
-              alert("OTP submitted successfully!");
-              setIsOtpModalVisible(false); // Close OTP modal after submission
-            }}
+            onClick={handleVerifyOtp}
           >
             Submit
           </Button>

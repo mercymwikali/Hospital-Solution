@@ -16,6 +16,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPatient, createTriageVisit } from "../actions/patientActions";
+import moment from 'moment';  // Ensure you import moment
 
 const PatientRegistration = () => {
   const dispatch = useDispatch();
@@ -37,21 +38,24 @@ const PatientRegistration = () => {
     middleName: "",
     lastName: "",
     idNumber: "",
-    gender: "",
-    dateOfBirth: "",
+    gender: 0,
+    dob: "",
     phoneNumber: "",
     paymentMode: 0,
-    kinName: "",
-    kinRelationship: "",
-    kinPhoneNumber: "",
+    nextOfKinFullName: "",
+    nextOfKinRelationship: "",
+    nextOfKinPhoneNo: "",
     patientType: "",
-    insurance: "",
-    memberName: "",
-    memberNumber: "",
+    insuranceNo: "",
+    insuranceName: "",
+    insurancePrinicipalMemberName: "",
+    isPrincipleMember: false,
+    membershipNo: "",
     nationality: "",
     county: "",
-    isPrincipalMember: false,
     schemeName: "",
+    howYouKnewABoutUs: "",
+    doctor: "",
   });
 
   const [patientId, setPatientId] = useState(null);
@@ -64,6 +68,11 @@ const PatientRegistration = () => {
 
   // Handle select and date changes
   const handleSelectChange = (name, value) => {
+     // If the field is 'dob', format the value as 'YYYY-MM-DD'
+  if (name === "dob") {
+    // Format the date as 'YYYY-MM-DD'
+    value = value ? moment(value).format("YYYY-MM-DD") : "";
+  }
     setNewPatient((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -76,7 +85,14 @@ const PatientRegistration = () => {
   };
   // Dispatch the create patient action
   const handleSubmit = async () => {
-    const patientID = await dispatch(createPatient(newPatient)); // Get the patient ID after dispatching
+
+     // Prepare the new patient data
+  const patientData = {
+    ...newPatient,
+    myAction: "create", // Set action as 'create'
+    patientNo: "",      // Set patientNo as empty for new patient creation
+  };
+    const patientID = await dispatch(createPatient(patientData)); // Get the patient ID after dispatching
     if (patientID) {
       setPatientId(patientID);
       console.log("Patient ID:", patientID);
@@ -92,21 +108,28 @@ const PatientRegistration = () => {
     if (visitSuccess) {
       setNewPatient({
         ...newPatient,
+      
         firstName: "",
         middleName: "",
         lastName: "",
         idNumber: "",
         gender: "",
-        dateOfBirth: "",
+        dob: "",
         phoneNumber: "",
-        email: "",
-        kinName: "",
-        kinRelationship: "",
-        kinPhoneNumber: "",
-        patientType: "",
-        insurance: "",
-        memberName: "",
-        memberNumber: "",
+        paymentMode: 0,
+        nextOfKinFullName: "",
+        nextOfKinRelationship: "",
+        nextOfKinPhoneNo: "",
+        insuranceNo: "",
+        insuranceName: "",
+        insurancePrinicipalMemberName: "",
+        isPrincipleMember: false,
+        membershipNo: "",
+        nationality: "",
+        county: "",
+        schemeName: "",
+        howYouKnewABoutUs: "",
+        doctor: "",
       });
     }
   };
@@ -186,9 +209,9 @@ const PatientRegistration = () => {
                 variant="borderless"
                 size="large"
               >
-                <Select.Option value="">--Select Gender--</Select.Option>
-                <Select.Option value="male">Male</Select.Option>
-                <Select.Option value="female">Female</Select.Option>
+                <Select.Option value="0">--Select Gender--</Select.Option>
+                <Select.Option value="1">Male</Select.Option>
+                <Select.Option value="2">Female</Select.Option>
               </Select>
             </div>
           </div>
@@ -199,8 +222,8 @@ const PatientRegistration = () => {
               <DatePicker
                 className="w-100, custom-select"
                 placeholder="Select Date of Birth"
-                value={newPatient.dateOfBirth}
-                onChange={(value) => handleSelectChange("dateOfBirth", value)}
+                value={newPatient.dob ? moment(newPatient.dob) : null}  // Convert to moment if it's in string format
+                onChange={(value) => handleSelectChange("dob", value)}
                 variant="borderless"
                 size="large"
               />
@@ -243,7 +266,10 @@ const PatientRegistration = () => {
                 onChange={(value) => handleSelectChange("county", value)}
                 variant="borderless"
                 size="large"
-              ></Select>
+              >
+                                <Select.Option value="">--Select County--</Select.Option>
+
+              </Select>
             </div>
           </div>
           <div className="row g-3 my-2 align-items-center justify-content-center">
@@ -260,6 +286,18 @@ const PatientRegistration = () => {
               />
             </div>
             <div className="col-12 col-md-6 text-primary">
+              <label className="form-label">Patient Type:</label>
+              <Select
+                placeholder="Select Patient Type"
+                className="w-100, custom-select"
+                options={PatientypeOptions}
+                value={newPatient.paymentMode}
+                onChange={(value) => handleSelectChange("paymentMode", value)}
+                variant="borderless"
+                size="large"
+              ></Select>
+            </div>
+            {/* <div className="col-12 col-md-6 text-primary">
               <label className="form-label">Payment Mode:</label>
               <Input
                 placeholder="Enter Payment Mode"
@@ -271,7 +309,7 @@ const PatientRegistration = () => {
                 variant="borderless"
                 size="large"
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="row g-3 my-2 align-items-center justify-content-center">
@@ -279,8 +317,8 @@ const PatientRegistration = () => {
               <label className="form-label">Next of Kin Name:</label>
               <Input
                 placeholder="Enter Next of Kin Name"
-                name="kinName"
-                value={newPatient.kinName}
+                name="nextOfKinFullName"
+                value={newPatient.nextOfKinFullName}
                 onChange={handleInputChange}
                 className="custom-input"
                 variant="borderless"
@@ -293,9 +331,9 @@ const PatientRegistration = () => {
                 placeholder="Select Relationship"
                 className="w-100, custom-select"
                 options={relationshipOptions}
-                value={newPatient.kinRelationship}
+                value={newPatient.nextOfKinRelationship}
                 onChange={(value) =>
-                  handleSelectChange("kinRelationship", value)
+                  handleSelectChange("nextOfKinRelationship", value)
                 }
                 variant="borderless"
                 size="large"
@@ -308,8 +346,8 @@ const PatientRegistration = () => {
               <label className="form-label">Next of Kin Phone Number:</label>
               <Input
                 placeholder="254 0000 00000"
-                name="kinPhoneNumber"
-                value={newPatient.kinPhoneNumber}
+                name="nextOfKinPhoneNo"
+                value={newPatient.nextOfKinPhoneNo}
                 onChange={handleInputChange}
                 className="custom-input"
                 variant="borderless"
@@ -317,16 +355,16 @@ const PatientRegistration = () => {
               />
             </div>
             <div className="col-12 col-md-6 text-primary">
-              <label className="form-label">Patient Type:</label>
-              <Select
-                placeholder="Select Patient Type"
-                className="w-100, custom-select"
-                options={PatientypeOptions}
-                value={newPatient.patientType}
-                onChange={(value) => handleSelectChange("patientType", value)}
+              <label className="form-label">Scheme Name:</label>
+              <Input
+                placeholder="Enter Scheme Name"
+                name="schemeName"
+                value={newPatient.schemeName}
+                onChange={handleInputChange}
+                className="custom-input"
                 variant="borderless"
                 size="large"
-              ></Select>
+              />
             </div>
           </div>
 
@@ -337,8 +375,8 @@ const PatientRegistration = () => {
                 placeholder="Select Insurance"
                 className="w-100, custom-select"
                 options={InsuranceOptions}
-                value={newPatient.insurance}
-                onChange={(value) => handleSelectChange("insurance", value)}
+                value={newPatient.insuranceName}
+                onChange={(value) => handleSelectChange("insuranceName", value)}
                 variant="borderless"
                 size="large"
               ></Select>
@@ -349,8 +387,8 @@ const PatientRegistration = () => {
               </label>
               <Input
                 placeholder="Enter Member Name"
-                name="memberName"
-                value={newPatient.memberName}
+                name="insurancePrinicipalMemberName"
+                value={newPatient.insurancePrinicipalMemberName}
                 onChange={handleInputChange}
                 className="custom-input"
                 variant="borderless"
@@ -364,8 +402,8 @@ const PatientRegistration = () => {
               <label className="form-label">Insurance No:</label>
               <Input
                 placeholder="Enter Member No"
-                name="memberNumber"
-                value={newPatient.memberNumber}
+                name="membershipNo"
+                value={newPatient.membershipNo}
                 onChange={handleInputChange}
                 className="custom-input"
                 variant="borderless"
@@ -377,9 +415,9 @@ const PatientRegistration = () => {
                 Is Principal Member ?
               </label>
               <Switch
-                checked={newPatient.isPrincipalMember}
+                checked={newPatient.isPrincipleMember}
                 onChange={(checked) =>
-                  handleSwitchChange("isPrincipalMember", checked)
+                  handleSwitchChange("isPrincipleMember", checked)
                 }
                 size="large"
                 style={{ margin: "0 10px" }}
@@ -387,18 +425,7 @@ const PatientRegistration = () => {
             </div>
           </div>
           <div className="row g-3 my-2 align-items-center ">
-            <div className="col-12 col-md-6 text-primary">
-              <label className="form-label">Scheme Name:</label>
-              <Input
-                placeholder="Enter Scheme Name"
-                name="schemeName"
-                value={newPatient.schemeName}
-                onChange={handleInputChange}
-                className="custom-input"
-                variant="borderless"
-                size="large"
-              />
-            </div>
+           
           </div>
 
           <div className="d-flex justify-content-center my-5 gap-3">

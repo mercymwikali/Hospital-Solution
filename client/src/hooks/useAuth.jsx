@@ -1,15 +1,19 @@
 import { useSelector } from 'react-redux';
-import {jwtDecode} from 'jwt-decode';
 
+// Custom hook to retrieve authenticated user info
 const useAuth = () => {
-  // Select user information from Redux store
-  const userLogin = useSelector((state) => state.userLogin);
+  // Select the OTP verification state from Redux
+  const userLogin = useSelector((state) => state.otpVerify);
   const { userInfo } = userLogin;
 
-  // Decode the JWT token if user information is available
-  const decodedUserInfo = userInfo ? jwtDecode(userInfo.accessToken) : null;
 
-  return decodedUserInfo; // Return the decoded user information
+  // If userInfo is not found in Redux, check localStorage
+  const storedUserInfo = localStorage.getItem('userInfo');
+  if (storedUserInfo) {
+    return JSON.parse(storedUserInfo);
+  }
+
+  return null; // Return null if no userInfo is found
 };
 
 export default useAuth;

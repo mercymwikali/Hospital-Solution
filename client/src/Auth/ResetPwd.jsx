@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Button, Card, Input } from "antd";
-import logoLogin from "../assets/images/logoLogin.png"; // Logo for the header
-import loginImg from "../assets/images/loginImg.jpg"; // Illustration image
+import logoLogin from "../assets/images/logoLogin.png";
+import loginImg from "../assets/images/loginImg.jpg"; 
 
 const ResetPwd = () => {
   const [newPassword, setNewPassword] = useState(""); // New password state

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { Alert, Button, Card, Input } from "antd";
-import logoLogin from "../assets/images/logoLogin.png"; // Add the logo image import here
-import logo from "../assets/images/logo.png"; // Add the logo image import here
-import loginImg from "../assets/images/loginImg.jpg";
+import logoLogin from "../assets/images/logoLogin.png";
+import loginImg from "../assets/images/loginImg.jpg"; 
 
 const ForgotPwd = () => {
   const [identifier, setIdentifier] = useState(""); // Email or Staff Number

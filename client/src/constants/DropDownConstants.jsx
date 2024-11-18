@@ -23,9 +23,9 @@ export const   relationshipOptions = [
 
 export const PatientypeOptions = [
     { label: '--Select Patient Type--', value: '' },
-    { label: 'Cash', value: 'Cash' },
-    { label: 'Insurance', value: 'Insurance' },
-    { label: 'Corporate Insurance', value: 'Corporate Insurance' },
+    { label: 'Cash', value: '1' },
+   // { label: 'Insurance', value: 'Insurance' },
+    { label: 'Corporate Insurance', value: '2' },
 ];
 
 export  const InsuranceOptions = [

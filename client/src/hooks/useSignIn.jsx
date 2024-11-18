@@ -1,64 +1,88 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
-import { login } from '../actions/userActions';
+import { forgotPassword, login, verifyOtp } from '../actions/userActions';
 
 const useSignIn = () => {
-  const [email, setEmail] = useState('');
+  const [staffNo, setStaffNo] = useState('');
   const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
+  const [isOtpRequired, setIsOtpRequired] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const loginHandler = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = loginHandler;
+  const { userInfo } = loginHandler;
 
-  const handleLogin = () => {
-    dispatch(login(email, password));
+  const verifyOtpHandler = useSelector((state) => state.otpVerify);
+  const {userInfo: verifyOtpUserInfo, success: verifyOtpSuccess } = verifyOtpHandler;
+
+
+  const forgotPwdHandler = useSelector((state) => state.forgotPwd);
+  const { userInfo: forgotPwdUserInfo, success: forgotPwdSuccess , error: forgotPwdError } = loginHandler;
+
+  const handleLogin = async () => {
+    await dispatch(login(staffNo, password));
+    console.log("User info:", userInfo);
+    if (userInfo?.sessionToken) {
+      setIsOtpRequired(true); // Show OTP modal when sessionToken exists
+    }
   };
 
-  useEffect(() => {
-    if (userInfo && userInfo.accessToken) {
-      try {
-        const decoded = jwtDecode(userInfo.accessToken);
-        const roles = decoded.user?.role;
+  const handleVerifyOtp = async () => {
+    console.log('Verifying OTP with:', staffNo, otp, userInfo?.sessionToken);
+    await dispatch(verifyOtp(staffNo, otp, userInfo.sessionToken));
 
-        if (roles) {
-          switch (roles) { // Assuming roles is a string
-            case "Admin":
-              navigate('/admin');
-              break;
-            case "Doctor":
-              navigate('/Doctor');
-              break;
-            case "Nurse":
-              navigate('/Nurse');
-              break;
-              case "Reception":
-                navigate('/Reception');
-                break;
-            default:
-              navigate('/login'); // Redirect to login or a default page if role is not recognized
-              break;
-          }
-        } else {
-          navigate('/login'); // Handle case where roles are not defined
-        }
-      } catch (error) {
-        console.error("Failed to decode token:", error);
-        navigate('/login'); // Redirect to login if decoding fails
-      }
+    if (verifyOtpUserInfo) {
+      // Reset OTP state before navigating
+      setOtp('');
+      setIsOtpRequired(false);
+      // Navigate to Doctor route after successful OTP verification
+      navigate("/Doctor");
     }
-  }, [userInfo, navigate]);
+  };
+
+
+  const handleForgotPassword = async () => {
+    await dispatch(forgotPassword(staffNo ));
+    console.log("User info:", userInfo);
+     
+    if(forgotPwdSuccess) {
+      navigate("/reset-password");
+    }
+  };
+
+  // Effect to handle OTP modal visibility based on sessionToken
+  useEffect(() => {
+    if (userInfo?.sessionToken && !verifyOtpSuccess) {
+      setIsOtpRequired(true); // Show OTP modal if sessionToken exists and OTP is not verified
+    } else {
+      setIsOtpRequired(false); // Close OTP modal after OTP verification
+    }
+  }, [userInfo?.sessionToken, verifyOtpSuccess]);
+
+  useEffect(() => {
+    if (verifyOtpUserInfo) {
+      // Reset OTP state before navigating
+      setOtp('');
+      setIsOtpRequired(false);
+      // Navigate to Doctor route after successful OTP verification
+      navigate("/Doctor");
+    }
+  }, [verifyOtpUserInfo]);
 
   return {
-    email,
-    setEmail,
+    staffNo,
+    setStaffNo,
     password,
     setPassword,
+    otp,
+    setOtp,
+    isOtpRequired,
     handleLogin,
-    loading,
-    error,
+    handleVerifyOtp,
+    loading: loginHandler.loading,
+    error: loginHandler.error,
   };
 };
 

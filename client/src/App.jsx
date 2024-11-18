@@ -32,7 +32,7 @@ import ViewProfile from "./Auth/ViewProfile";
 import ReceptionLayout from "./Layouts/ReceptionLayout";
 
 function App() {
-  const userLogin = useSelector((state) => state.userLogin);
+  const userLogin = useSelector((state) => state.otpVerify);
   const userInfo = userLogin?.userInfo;
 
   return (
@@ -79,7 +79,7 @@ function App() {
       <Route element={<PrivateRoute allowedRoles={[Roles.Reception]} />}>
         <Route path="/Reception" element={<ReceptionLayout />} />
       </Route>
-      <Route element={<PrivateRoute allowedRoles={[Roles.Doctor]} />}>
+      <Route element={<PrivateRoute  />}>
         <Route path="/Doctor" element={<DocLayout />}>
           <Route index element={<DoctorDashboard />} />
 
